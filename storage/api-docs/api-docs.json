@@ -1,0 +1,178 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "PhishGuard API",
+        "description": "API untuk deteksi dan pelaporan phishing",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://be-phisguard-production.up.railway.app/api",
+            "description": "Production Server"
+        }
+    ],
+    "paths": {
+        "/report": {
+            "post": {
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Submit phishing report",
+                "operationId": "4b64511eec46a94d687d3f3f174bc9c0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "channel_chat",
+                                    "sender_account",
+                                    "chat_text"
+                                ],
+                                "properties": {
+                                    "channel_chat": {
+                                        "type": "string",
+                                        "example": "WhatsApp"
+                                    },
+                                    "sender_account": {
+                                        "type": "string",
+                                        "example": "08123456789"
+                                    },
+                                    "chat_text": {
+                                        "type": "string",
+                                        "example": "Klik link hadiah ini"
+                                    },
+                                    "url": {
+                                        "type": "string",
+                                        "example": "http://phishing.com"
+                                    },
+                                    "reporter_name": {
+                                        "type": "string",
+                                        "example": "Pijen"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Report submitted successfully"
+                    }
+                }
+            }
+        },
+        "/admin/reports": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get all reports",
+                "operationId": "ffbc48041875d81b4fe52f7eac0d1776",
+                "responses": {
+                    "200": {
+                        "description": "List of reports"
+                    }
+                }
+            }
+        },
+        "/admin/report/{id}": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get report by ID",
+                "operationId": "5357af229e59d402b52c0eb65cc90925",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Report detail"
+                    },
+                    "404": {
+                        "description": "Report not found"
+                    }
+                }
+            }
+        },
+        "/admin/dashboard/weekly-trend": {
+            "get": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "Get weekly phishing trend",
+                "operationId": "fa74dce4fa1590905734631bf4c6bb3a",
+                "responses": {
+                    "200": {
+                        "description": "Weekly trend data"
+                    }
+                }
+            }
+        },
+        "/admin/dashboard/top-channel": {
+            "get": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "Top phishing channels",
+                "operationId": "6971dc759b4a7423d90f7c39118ac31c",
+                "responses": {
+                    "200": {
+                        "description": "Top channels"
+                    }
+                }
+            }
+        },
+        "/admin/dashboard/top-modus": {
+            "get": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "Top phishing modus",
+                "operationId": "c84b6a6ca14ff20a2d273930b025da91",
+                "responses": {
+                    "200": {
+                        "description": "Top modus"
+                    }
+                }
+            }
+        },
+        "/admin/dashboard/segmentation": {
+            "get": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "User and region segmentation",
+                "operationId": "c91f515621c1250b2e1aab569c026f55",
+                "responses": {
+                    "200": {
+                        "description": "Segmentation data"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Report",
+            "description": "Report"
+        },
+        {
+            "name": "Admin",
+            "description": "Admin"
+        },
+        {
+            "name": "Dashboard",
+            "description": "Dashboard"
+        }
+    ]
+}
