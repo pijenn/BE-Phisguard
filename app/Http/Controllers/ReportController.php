@@ -24,6 +24,9 @@ class ReportController extends Controller
                     new OA\Property(property: "chat_text", type: "string", example: "Klik link hadiah ini"),
                     new OA\Property(property: "url", type: "string", example: "http://phishing.com"),
                     new OA\Property(property: "reporter_name", type: "string", example: "Pijen"),
+                    new OA\Property(property: "region", type: "string", example: "Jakarta"),
+                    new OA\Property(property: "interaksi", type: "bool", example: true),
+                    new OA\Property(property: "incident_summary", type: "string", example: "Pengguna menerima pesan phishing dan mengklik link"),
                 ]
             )
         ),
@@ -47,9 +50,7 @@ class ReportController extends Controller
             'url' => $request->url,
             'reporter_name' => $request->reporter_name,
             'region' => $request->region,
-            'modus_type' => $request->modus_type,
-            'evidence_text' => $request->evidence_text,
-            'user_segment' => $request->user_segment,
+            'interaksi' => $request->interaksi,
             'incident_summary' => $request->incident_summary,
         ]);
 
@@ -69,9 +70,9 @@ class ReportController extends Controller
     }
 
     #[OA\Get(
-        path: "/admin/reports",
-        summary: "Get all reports",
-        tags: ["Admin"],
+        path: "/reports",
+        summary: "Get all reports (accessible by all users)",
+        tags: ["Report"],
         responses: [
             new OA\Response(response: 200, description: "List of reports")
         ]
@@ -82,9 +83,9 @@ class ReportController extends Controller
     }
 
     #[OA\Get(
-        path: "/admin/report/{id}",
-        summary: "Get report by ID",
-        tags: ["Admin"],
+        path: "/report/{id}",
+        summary: "Get report detail",
+        tags: ["Report"],
         parameters: [
             new OA\Parameter(
                 name: "id",

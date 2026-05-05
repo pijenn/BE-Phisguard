@@ -12,6 +12,226 @@
         }
     ],
     "paths": {
+        "/articles": {
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Get all articles",
+                "operationId": "89181b74a8aa4d580750ede6aa32f92a",
+                "parameters": [
+                    {
+                        "name": "kategori",
+                        "in": "query",
+                        "description": "Filter by category",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Tips",
+                                "Modus",
+                                "Update Kasus"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of articles"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Create new educational article",
+                "operationId": "ce06e2544b80bc76b184c771c0fb2e7e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "judul",
+                                    "kategori_artikel",
+                                    "isi_artikel",
+                                    "rangkuman"
+                                ],
+                                "properties": {
+                                    "judul": {
+                                        "type": "string",
+                                        "example": "Waspada Phishing Via Email"
+                                    },
+                                    "kategori_artikel": {
+                                        "type": "string",
+                                        "example": "Tips",
+                                        "enum": [
+                                            "Tips",
+                                            "Modus",
+                                            "Update Kasus"
+                                        ]
+                                    },
+                                    "gambar": {
+                                        "description": "Image file (JPEG/PNG)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "alt_text": {
+                                        "type": "string",
+                                        "example": "Illustrasi email phishing"
+                                    },
+                                    "isi_artikel": {
+                                        "type": "string",
+                                        "example": "Artikel lengkap tentang cara mendeteksi phishing..."
+                                    },
+                                    "rangkuman": {
+                                        "type": "string",
+                                        "example": "Ringkasan singkat artikel"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Article created successfully"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    }
+                }
+            }
+        },
+        "/articles/{id}": {
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Get article by ID",
+                "operationId": "126f0079c2def3834cf2c4a2456d16f9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article detail"
+                    },
+                    "404": {
+                        "description": "Article not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Delete article",
+                "operationId": "ec28483335ebdc4fd11f883fcf6f4487",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article deleted successfully"
+                    },
+                    "404": {
+                        "description": "Article not found"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Update educational article",
+                "operationId": "98182cbd13556214028a5d193e7ebc5b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "judul": {
+                                        "type": "string",
+                                        "example": "Waspada Phishing Via Email"
+                                    },
+                                    "kategori_artikel": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Tips",
+                                            "Modus",
+                                            "Update Kasus"
+                                        ]
+                                    },
+                                    "gambar": {
+                                        "description": "Image file (JPEG/PNG)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "alt_text": {
+                                        "type": "string"
+                                    },
+                                    "isi_artikel": {
+                                        "type": "string"
+                                    },
+                                    "rangkuman": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Article updated successfully"
+                    },
+                    "404": {
+                        "description": "Article not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    }
+                }
+            }
+        },
         "/report": {
             "post": {
                 "tags": [
@@ -49,6 +269,18 @@
                                     "reporter_name": {
                                         "type": "string",
                                         "example": "Pijen"
+                                    },
+                                    "region": {
+                                        "type": "string",
+                                        "example": "Jakarta"
+                                    },
+                                    "interaksi": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "incident_summary": {
+                                        "type": "string",
+                                        "example": "Pengguna menerima pesan phishing dan mengklik link"
                                     }
                                 },
                                 "type": "object"
@@ -63,13 +295,13 @@
                 }
             }
         },
-        "/admin/reports": {
+        "/reports": {
             "get": {
                 "tags": [
-                    "Admin"
+                    "Report"
                 ],
-                "summary": "Get all reports",
-                "operationId": "ffbc48041875d81b4fe52f7eac0d1776",
+                "summary": "Get all reports (accessible by all users)",
+                "operationId": "072b45576c119a6b1db560fcb15280d7",
                 "responses": {
                     "200": {
                         "description": "List of reports"
@@ -77,13 +309,13 @@
                 }
             }
         },
-        "/admin/report/{id}": {
+        "/report/{id}": {
             "get": {
                 "tags": [
-                    "Admin"
+                    "Report"
                 ],
-                "summary": "Get report by ID",
-                "operationId": "5357af229e59d402b52c0eb65cc90925",
+                "summary": "Get report detail",
+                "operationId": "d6fa9f7e95050abe887fd35e855a9dcf",
                 "parameters": [
                     {
                         "name": "id",
@@ -159,20 +391,247 @@
                     }
                 }
             }
+        },
+        "/admin/respons": {
+            "post": {
+                "tags": [
+                    "Admin Response"
+                ],
+                "summary": "Create admin response for report",
+                "operationId": "354f2964dd2a0255511c04c949f13165",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "report_id",
+                                    "hasil_keputusan"
+                                ],
+                                "properties": {
+                                    "report_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "hasil_keputusan": {
+                                        "type": "string",
+                                        "example": "Confirm Valid Phishing",
+                                        "enum": [
+                                            "Confirm Valid Phishing",
+                                            "False Positive",
+                                            "Need More Info"
+                                        ]
+                                    },
+                                    "kategori": {
+                                        "type": "string",
+                                        "example": "Mengatasnamakan Bank",
+                                        "enum": [
+                                            "Mengatasnamakan Bank",
+                                            "E-Wallet / Fintech",
+                                            "OTP / Verifikasi Akun",
+                                            "Hadiah / Undian",
+                                            "Paket / Kurir",
+                                            "Customer Service Palsu",
+                                            "Investasi Bodong",
+                                            "Akun Marketplace",
+                                            "Typosquatting / Domain Palsu",
+                                            "Lainnya"
+                                        ]
+                                    },
+                                    "catatan": {
+                                        "type": "string",
+                                        "example": "Telah diverifikasi sebagai phishing valid"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Response created successfully"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    }
+                }
+            }
+        },
+        "/respons": {
+            "get": {
+                "tags": [
+                    "Response"
+                ],
+                "summary": "Get all responses",
+                "operationId": "24ec7a2fc9cba4380758042790d22290",
+                "parameters": [
+                    {
+                        "name": "report_id",
+                        "in": "query",
+                        "description": "Filter by report ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "hasil_keputusan",
+                        "in": "query",
+                        "description": "Filter by decision result",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Confirm Valid Phishing",
+                                "False Positive",
+                                "Need More Info"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of responses"
+                    }
+                }
+            }
+        },
+        "/respons/{id}": {
+            "get": {
+                "tags": [
+                    "Response"
+                ],
+                "summary": "Get response by ID",
+                "operationId": "8384e07ca652bf30fe117aa816ad26c1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response detail"
+                    },
+                    "404": {
+                        "description": "Response not found"
+                    }
+                }
+            }
+        },
+        "/admin/respons/{id}": {
+            "delete": {
+                "tags": [
+                    "Admin Response"
+                ],
+                "summary": "Delete response",
+                "operationId": "123d9cd82dedd93b65f301f9f305c343",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response deleted successfully"
+                    },
+                    "404": {
+                        "description": "Response not found"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Admin Response"
+                ],
+                "summary": "Update response",
+                "operationId": "3fe62a68ec1e5a460ff247c334967975",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "hasil_keputusan": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Confirm Valid Phishing",
+                                            "False Positive",
+                                            "Need More Info"
+                                        ]
+                                    },
+                                    "kategori": {
+                                        "type": "string"
+                                    },
+                                    "catatan": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Response updated successfully"
+                    },
+                    "404": {
+                        "description": "Response not found"
+                    }
+                }
+            }
         }
     },
     "tags": [
+        {
+            "name": "Articles",
+            "description": "Articles"
+        },
         {
             "name": "Report",
             "description": "Report"
         },
         {
-            "name": "Admin",
-            "description": "Admin"
-        },
-        {
             "name": "Dashboard",
             "description": "Dashboard"
+        },
+        {
+            "name": "Admin Response",
+            "description": "Admin Response"
+        },
+        {
+            "name": "Response",
+            "description": "Response"
         }
     ]
 }

@@ -43,4 +43,9 @@ public function adminActions()
 {
     return $this->hasMany(AdminAction::class);
 }
+
+public function respons()
+{
+    return $this->hasOne(Respons::class);
+}
 }
