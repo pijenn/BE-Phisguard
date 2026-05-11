@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use App\Models\MlResult;
+use App\Services\MlPredictionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OA;
 
 class ReportController extends Controller
 {
+    public function __construct(
+        private readonly MlPredictionService $mlPredictionService
+    ) {
+    }
+
     #[OA\Post(
         path: "/report",
         summary: "Submit phishing report",
@@ -54,12 +61,27 @@ class ReportController extends Controller
             'incident_summary' => $request->incident_summary,
         ]);
 
+        try {
+            $prediction = $this->mlPredictionService->predict($request->chat_text);
+        } catch (\Throwable $e) {
+            Log::error('ML prediction failed for report submission', [
+                'error' => $e->getMessage(),
+            ]);
+
+            $prediction = [
+                'label' => 'non-phishing',
+                'risk_score' => 0,
+                'priority' => 'low',
+                'reason' => 'ML service unavailable',
+            ];
+        }
+
         $mlResult = MlResult::create([
             'report_id' => $report->id,
-            'label' => 'phishing',
-            'risk_score' => rand(60, 100),
-            'priority' => 'high',
-            'reason' => 'Terdeteksi mengandung URL mencurigakan'
+            'label' => $prediction['label'],
+            'risk_score' => $prediction['risk_score'],
+            'priority' => $prediction['priority'],
+            'reason' => $prediction['reason'],
         ]);
 
         return response()->json([

@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'ml' => [
+        'python_bin' => env('ML_PYTHON_BIN'),
+        'predict_script' => env('ML_PREDICT_SCRIPT', 'ml/predict_model.py'),
+        'timeout' => (int) env('ML_PREDICT_TIMEOUT', 20),
+    ],
+
 ];
